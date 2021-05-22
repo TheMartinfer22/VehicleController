@@ -1,0 +1,6 @@
+CREATE TABLE usuarios (
+ id integer PRIMARY KEY,
+ email varchar(30) NOT NULL,
+ cpf varchar(40) NOT NULL,
+ nascimento date NOT NULL
+);
