@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.martin.controlador.api.controller.exceptions.DadosEmUso;
 import team.martin.controlador.domain.repository.UserRepository;
-import team.martin.controlador.model.Usuarios;
+import team.martin.controlador.domain.service.UsuarioCadastroService;
+import team.martin.controlador.model.Usuario;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,15 +18,21 @@ public class CarrosController {
 
     @Autowired
     private UserRepository userRepository;
+    private UsuarioCadastroService usuarioCadastroService;
+
+    public CarrosController(UserRepository userRepository, UsuarioCadastroService usuarioCadastroService) {
+        this.userRepository = userRepository;
+        this.usuarioCadastroService = usuarioCadastroService;
+    }
 
     @GetMapping
-    public List<Usuarios> listar() {
+    public List<Usuario> listar() {
 
         return userRepository.findAll();
     }
 
     @GetMapping("/{userid}")
-    public ResponseEntity<Usuarios> buscarID(@PathVariable Long userid) {
+    public ResponseEntity<Usuario> buscarID(@PathVariable Long userid) {
 
         return userRepository.findById(userid)
 //                .map(user -> ResponseEntity.ok(user))
@@ -40,29 +48,29 @@ public class CarrosController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuarios registro(@Valid @RequestBody Usuarios user){
-        return userRepository.save(user);
+    public Usuario registro(@Valid @RequestBody Usuario user){
+        return usuarioCadastroService.criar(user);
     }
 
     @PutMapping("/{userID}")
-    public ResponseEntity<Usuarios> atualizar(@PathVariable Long userID, @Valid @RequestBody Usuarios user){
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long userID, @Valid @RequestBody Usuario user){
 
         if (!userRepository.existsById(userID)){
             return ResponseEntity.notFound().build();
         }
         user.setId(userID);
-        userRepository.save(user);
+        usuarioCadastroService.atualizar(user);
         return ResponseEntity.ok().build();
 
     }
 
     @DeleteMapping("/{userID}")
-    public ResponseEntity<Usuarios> deletar(@PathVariable Long userID){
+    public ResponseEntity<Usuario> deletar(@PathVariable Long userID){
         if (!userRepository.existsById(userID)){
             return ResponseEntity.notFound().build();
         }
 
-        userRepository.deleteById(userID);
+        usuarioCadastroService.excluir(userID);
         return ResponseEntity.noContent().build();
     }
 }
