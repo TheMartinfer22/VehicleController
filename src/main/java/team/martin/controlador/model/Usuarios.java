@@ -1,6 +1,9 @@
 package team.martin.controlador.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -10,8 +13,16 @@ public class Usuarios {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    @Email
+    @Size(max = 20)
     private String email;
+
+    @NotBlank
+    @Size(max = 12)
     private String cpf;
+
     private LocalDate nascimento;
 
     public String getCpf() {
@@ -40,6 +51,10 @@ public class Usuarios {
 
     public void setNascimento(LocalDate nascimento) {
         this.nascimento = nascimento;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
