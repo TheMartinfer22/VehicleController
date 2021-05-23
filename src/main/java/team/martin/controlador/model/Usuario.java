@@ -1,5 +1,7 @@
 package team.martin.controlador.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -7,8 +9,9 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity(name = "usuarios")
-public class Usuarios {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity(name = "usuario")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,8 +64,8 @@ public class Usuarios {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Usuarios usuarios = (Usuarios) o;
-        return id.equals(usuarios.id) && email.equals(usuarios.email) && cpf.equals(usuarios.cpf);
+        Usuario usuario = (Usuario) o;
+        return id.equals(usuario.id) && email.equals(usuario.email) && cpf.equals(usuario.cpf);
     }
 
     @Override
