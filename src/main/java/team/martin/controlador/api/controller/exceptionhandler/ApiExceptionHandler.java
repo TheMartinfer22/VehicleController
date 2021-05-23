@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import team.martin.controlador.api.controller.exceptions.DadosEmUso;
 
 import java.time.LocalDateTime;
 
@@ -26,5 +28,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
+    @ExceptionHandler(DadosEmUso.class)
+    public ResponseEntity<Object> handleDadosEmUso(DadosEmUso ex, WebRequest request){
+        Resultado result = new Resultado();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        result.setStatus(status.value());
+        result.setMotivo(ex.getMessage());
+        result.setTime(LocalDateTime.now());
+
+        return handleExceptionInternal(ex, result, new HttpHeaders(), status, request);
+    }
 
 }
