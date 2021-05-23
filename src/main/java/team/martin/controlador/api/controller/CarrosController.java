@@ -1,35 +1,69 @@
 package team.martin.controlador.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import team.martin.controlador.domain.repository.UserRepository;
 import team.martin.controlador.model.Usuarios;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Arrays;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/users")
 public class CarrosController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/users")
-    public List<Usuarios> listar(){
+    @GetMapping
+    public List<Usuarios> listar() {
 
         return userRepository.findAll();
     }
 
-    @GetMapping("/users/{userid}")
-    public Usuarios buscarID(@PathVariable Long userid){
+    @GetMapping("/{userid}")
+    public ResponseEntity<Usuarios> buscarID(@PathVariable Long userid) {
 
-        Optional<Usuarios> user = userRepository.findById(userid);
+        return userRepository.findById(userid)
+//                .map(user -> ResponseEntity.ok(user))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
 
-        return user.orElse(null);
+//        if (user.isPresent()){
+//            return ResponseEntity.ok(user.get());
+//        }
+//        return ResponseEntity.notFound().build();
+//        }
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuarios registro(@Valid @RequestBody Usuarios user){
+        return userRepository.save(user);
+    }
+
+    @PutMapping("/{userID}")
+    public ResponseEntity<Usuarios> atualizar(@PathVariable Long userID, @Valid @RequestBody Usuarios user){
+
+        if (!userRepository.existsById(userID)){
+            return ResponseEntity.notFound().build();
+        }
+        user.setId(userID);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @DeleteMapping("/{userID}")
+    public ResponseEntity<Usuarios> deletar(@PathVariable Long userID){
+        if (!userRepository.existsById(userID)){
+            return ResponseEntity.notFound().build();
+        }
+
+        userRepository.deleteById(userID);
+        return ResponseEntity.noContent().build();
     }
 }
+
