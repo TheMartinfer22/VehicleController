@@ -4,46 +4,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.martin.controlador.api.controller.exceptions.DadosEmUso;
 import team.martin.controlador.domain.repository.UserRepository;
 import team.martin.controlador.domain.service.UsuarioCadastroService;
-import team.martin.controlador.model.Usuario;
+import team.martin.controlador.dto.UserDTO;
+import team.martin.controlador.entity.Usuario;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/users")
-public class CarrosController {
+@RequestMapping("/usuarios")
+public class UsersController {
 
     @Autowired
     private UserRepository userRepository;
     private UsuarioCadastroService usuarioCadastroService;
 
-    public CarrosController(UserRepository userRepository, UsuarioCadastroService usuarioCadastroService) {
+    public UsersController(UserRepository userRepository, UsuarioCadastroService usuarioCadastroService) {
         this.userRepository = userRepository;
         this.usuarioCadastroService = usuarioCadastroService;
     }
 
     @GetMapping
-    public List<Usuario> listar() {
+    Stream<UserDTO> listar() {
 
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .stream()
+                .map(u -> new UserDTO(u.getId(), u.getEmail(), u.getCpf()));
     }
 
     @GetMapping("/{userid}")
     public ResponseEntity<Usuario> buscarID(@PathVariable Long userid) {
 
         return userRepository.findById(userid)
-//                .map(user -> ResponseEntity.ok(user))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-
-//        if (user.isPresent()){
-//            return ResponseEntity.ok(user.get());
-//        }
-//        return ResponseEntity.notFound().build();
-//        }
     }
 
     @PostMapping()
