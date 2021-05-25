@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import team.martin.controlador.domain.repository.CarrosRepository;
 import team.martin.controlador.domain.repository.UserRepository;
 import team.martin.controlador.entity.Carro;
-
 import javax.validation.Valid;
 
 @RestController
@@ -41,5 +40,14 @@ class CarroController {
         usuario.getCarros().add(carro);
         this.userRepository.save(usuario);
         return ResponseEntity.ok(usuario.getCarros());
+    }
+
+    @DeleteMapping("/usuarios/{usuarioId}/carros/{carroID}")
+    public ResponseEntity<?> deletar(@PathVariable Long userID, Long carroID){
+        if (!userRepository.existsById(userID) || (!carrosRepository.existsById(carroID))){
+            return ResponseEntity.notFound().build();
+        }
+        carrosRepository.deleteById(carroID);
+        return ResponseEntity.noContent().build();
     }
 }
