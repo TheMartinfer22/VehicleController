@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.martin.controlador.api.controller.exceptions.DadosEmUso;
 import team.martin.controlador.domain.repository.UserRepository;
-import team.martin.controlador.model.Usuario;
+import team.martin.controlador.entity.Usuario;
 
 @Service
 public class UsuarioCadastroService {
@@ -41,7 +41,4 @@ public class UsuarioCadastroService {
     public Usuario atualizar(Usuario user){
         return userRepository.save(user);
     }
-
-
-
 }
