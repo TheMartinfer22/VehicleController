@@ -1,4 +1,4 @@
-package team.martin.controlador.model;
+package team.martin.controlador.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -8,10 +8,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity(name = "usuario")
 public class Usuario {
+
+    public Usuario(){
+        // Solução para o problema "org.hibernate.InstantiationException: No default constructor for entity"
+        // http://www.mauda.com.br/?p=632
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +31,14 @@ public class Usuario {
     @NotBlank
     @Size(max = 12)
     private String cpf;
-
     private LocalDate nascimento;
+
+    @OneToMany
+    private Set<Carro> carros;
+
+    public Usuario(Set<Carro> carros) {
+        this.carros = carros;
+    }
 
     public String getCpf() {
         return cpf;
@@ -58,6 +70,14 @@ public class Usuario {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Carro> getCarros() {
+        return carros;
+    }
+
+    public void setCarros(Set<Carro> carros) {
+        this.carros = carros;
     }
 
     @Override
