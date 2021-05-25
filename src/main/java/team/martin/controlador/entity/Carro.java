@@ -7,6 +7,7 @@ import team.martin.controlador.entity.carro.Modelo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.Objects;
 
 @Entity
@@ -107,19 +108,54 @@ public class Carro {
     }
 
 //    @JsonProperty(value = "tem_rodizio")
+
+    public boolean validRodizio(String prefix, String day){
+        Calendar c = Calendar.getInstance();
+        return (getAno().getNome().startsWith(prefix,3)) || (c.getTime().toString().startsWith(day));
+    }
+
     public boolean isRodizio(){
 
-//        Calendar c = Calendar.getInstance();
-//
-//        if (getAno().getNome().startsWith("0",3) & (c.getTime().toString().startsWith("Mon"))){
-//            return true;
-//        }
-//        if (getAno().getNome().startsWith("1",3) & (c.getTime().toString().startsWith("Mon"))){
-//            return true;
-//        }
-//        if (getAno().getNome().startsWith("8",3) & (c.getTime().toString().startsWith("Mon"))){
-//            return true;
-//        }
-        return false; //TODO
+
+        if (validRodizio("0", "Mon")){
+            return true;
+        }
+        if (validRodizio("1", "Mon")){
+            return true;
+        }
+
+
+        if (validRodizio("2", "Tue")){
+            return true;
+        }
+        if (validRodizio("3", "Tue")){
+            return true;
+        }
+
+
+        if (validRodizio("4", "Wed")){
+            return true;
+        }
+        if (validRodizio("5", "Wed")){
+            return true;
+        }
+
+
+        if (validRodizio("6", "Thu")){
+            return true;
+        }
+        if (validRodizio("7", "Thu")){
+            return true;
+        }
+
+
+        if (validRodizio("8", "Fri")){
+            return true;
+        }
+        if (validRodizio("9", "Fri")){
+            return true;
+        }
+
+        return false;
    }
 }
