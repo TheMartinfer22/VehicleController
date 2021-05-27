@@ -1,4 +1,4 @@
-package team.martin.controlador.api.controller.exceptionhandler;
+package team.martin.controlador.utils.exceptionhandler;
 
 import java.time.LocalDateTime;
 
