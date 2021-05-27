@@ -1,19 +1,17 @@
-package team.martin.controlador.domain.service;
+package team.martin.controlador.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.martin.controlador.api.controller.exceptions.DadosEmUso;
-import team.martin.controlador.domain.repository.UserRepository;
+import team.martin.controlador.utils.exceptions.DadosEmUso;
+import team.martin.controlador.repository.UserRepository;
 import team.martin.controlador.entity.Usuario;
 
 @Service
-public class UsuarioCadastroService {
+public class UsuarioService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    public UsuarioCadastroService(UserRepository userRepository) {
+    public UsuarioService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
