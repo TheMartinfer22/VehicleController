@@ -1,4 +1,4 @@
-package team.martin.controlador.api.controller.exceptionhandler;
+package team.martin.controlador.utils.exceptionhandler;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import team.martin.controlador.api.controller.exceptions.DadosEmUso;
+import team.martin.controlador.utils.exceptions.DadosEmUso;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -37,6 +39,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         result.setTime(LocalDateTime.now());
 
         return handleExceptionInternal(ex, result, new HttpHeaders(), status, request);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public void handleNoSuchElementException(){
+
     }
 
 }

@@ -1,161 +1,153 @@
 package team.martin.controlador.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import team.martin.controlador.entity.carro.Ano;
-import team.martin.controlador.entity.carro.Marca;
-import team.martin.controlador.entity.carro.Modelo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Calendar;
 import java.util.Objects;
 
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "carro")
 public class Carro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long carroID;
 
-    @AttributeOverrides( // Mapeamento
-            {
-                    @AttributeOverride(
-                            name = "codigo",
-                            column = @Column(name = "marca_codigo")
-                    ),
-                    @AttributeOverride(
-                            name = "nome",
-                            column = @Column(name = "marca_nome")
-                    )
-            }
-    )
+    @JsonProperty(value = "Rodizio")
+    private boolean rodizio;
 
-    @NotNull
-    private Marca marca;
-    @AttributeOverrides(
-            {
-                    @AttributeOverride(
-                            name = "codigo",
-                            column = @Column(name = "modelo_codigo")
-                    ),
-                    @AttributeOverride(
-                            name = "nome",
-                            column = @Column(name = "modelo_nome")
-                    )
-            }
-    )
-    @NotNull
-    private Modelo modelo;
-    @AttributeOverrides(
-            {
-                    @AttributeOverride(
-                            name = "codigo",
-                            column = @Column(name = "ano_codigo")
-                    ),
-                    @AttributeOverride(
-                            name = "nome",
-                            column = @Column(name = "ano_nome")
-                    )
-            }
-    )
+    @JsonProperty(value = "CodigoFipe")
+    private String codigoFipe;
 
-    @NotNull
-    private Ano ano;
+    @JsonProperty(value = "Marca")
+    private String marca;
+
+    @JsonProperty(value = "Modelo")
+    private String modelo;
+
+    @JsonProperty(value = "AnoModelo")
+    private Integer ano;
+
+    @JsonProperty(value = "Combustivel")
+    private String combustivel;
+
+    @JsonProperty(value = "MesReferencia")
+    private String mesReferencia;
+
+    @JsonProperty(value = "SiglaCombustivel")
+    private String siglaCombustivel;
+
+    @JsonProperty(value = "Valor")
+    private String valor;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_usuario")
+    private Usuario usuario;
+
+    public Carro(Long carroID, String marca, String modelo, String valor) {
+    }
+    public Carro(){
+
+    }
+
+    public String getCodigoFipe() {
+        return codigoFipe;
+    }
+
+    public void setCodigoFipe(String codigoFipe) {
+        this.codigoFipe = codigoFipe;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public Integer getAno() {
+        return ano;
+    }
+
+    public void setAno(Integer ano) {
+        this.ano = ano;
+    }
+
+    public String getCombustivel() {
+        return combustivel;
+    }
+
+    public void setCombustivel(String combustivel) {
+        this.combustivel = combustivel;
+    }
+
+    public String getMesReferencia() {
+        return mesReferencia;
+    }
+
+    public void setMesReferencia(String mesReferencia) {
+        this.mesReferencia = mesReferencia;
+    }
+
+    public String getSiglaCombustivel() {
+        return siglaCombustivel;
+    }
+
+    public void setSiglaCombustivel(String siglaCombustivel) {
+        this.siglaCombustivel = siglaCombustivel;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Carro carro = (Carro) o;
-        return Objects.equals(id, carro.id) && Objects.equals(marca, carro.marca) && Objects.equals(modelo, carro.modelo) && Objects.equals(ano, carro.ano);
+        return codigoFipe.equals(carro.codigoFipe);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, marca, modelo, ano);
-    }
-
-    public void setModelo(Modelo modelo) {
-        this.modelo = modelo;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAno(Ano ano) {
-        this.ano = ano;
-    }
-
-    public void setMarca(Marca marca) {
-        this.marca = marca;
+        return Objects.hash(codigoFipe);
     }
 
     public Long getId() {
-        return id;
+        return carroID;
     }
 
-    public Ano getAno() {
-        return ano;
+    public void setId(Long id) {
+        this.carroID = id;
     }
 
-    public Marca getMarca() {
-        return marca;
+    public boolean isRodizio() {
+        return rodizio;
     }
 
-    public Modelo getModelo() {
-        return modelo;
+    public void setRodizio(boolean rodizio) {
+        rodizio = rodizio;
     }
-
-//    @JsonProperty(value = "tem_rodizio")
-
-    public boolean validRodizio(String prefix, String day){
-        Calendar c = Calendar.getInstance();
-        return (getAno().getNome().startsWith(prefix,3)) || (c.getTime().toString().startsWith(day));
-    }
-
-    public boolean isRodizio(){
-
-
-        if (validRodizio("0", "Mon")){
-            return true;
-        }
-        if (validRodizio("1", "Mon")){
-            return true;
-        }
-
-
-        if (validRodizio("2", "Tue")){
-            return true;
-        }
-        if (validRodizio("3", "Tue")){
-            return true;
-        }
-
-
-        if (validRodizio("4", "Wed")){
-            return true;
-        }
-        if (validRodizio("5", "Wed")){
-            return true;
-        }
-
-
-        if (validRodizio("6", "Thu")){
-            return true;
-        }
-        if (validRodizio("7", "Thu")){
-            return true;
-        }
-
-
-        if (validRodizio("8", "Fri")){
-            return true;
-        }
-        if (validRodizio("9", "Fri")){
-            return true;
-        }
-
-        return false;
-   }
 }
