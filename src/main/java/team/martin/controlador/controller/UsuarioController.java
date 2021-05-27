@@ -1,11 +1,10 @@
-package team.martin.controlador.api.controller;
+package team.martin.controlador.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.martin.controlador.domain.repository.UserRepository;
-import team.martin.controlador.domain.service.UsuarioCadastroService;
+import team.martin.controlador.repository.UserRepository;
+import team.martin.controlador.service.UsuarioService;
 import team.martin.controlador.dto.UserDTO;
 import team.martin.controlador.entity.Usuario;
 
@@ -14,15 +13,14 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsersController {
+public class UsuarioController {
 
-    @Autowired
     private UserRepository userRepository;
-    private UsuarioCadastroService usuarioCadastroService;
+    private UsuarioService usuarioService;
 
-    public UsersController(UserRepository userRepository, UsuarioCadastroService usuarioCadastroService) {
+    public UsuarioController(UserRepository userRepository, UsuarioService usuarioService) {
         this.userRepository = userRepository;
-        this.usuarioCadastroService = usuarioCadastroService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
@@ -44,7 +42,7 @@ public class UsersController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Usuario registro(@Valid @RequestBody Usuario user){
-        return usuarioCadastroService.criar(user);
+        return usuarioService.criar(user);
     }
 
     @PutMapping("/{userID}")
@@ -54,7 +52,7 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
         user.setId(userID);
-        usuarioCadastroService.atualizar(user);
+        usuarioService.atualizar(user);
         return ResponseEntity.ok().build();
 
     }
@@ -65,7 +63,7 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
 
-        usuarioCadastroService.excluir(userID);
+        usuarioService.excluir(userID);
         return ResponseEntity.noContent().build();
     }
 }

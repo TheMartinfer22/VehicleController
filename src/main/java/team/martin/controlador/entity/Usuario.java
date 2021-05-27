@@ -33,11 +33,11 @@ public class Usuario {
     private String cpf;
     private LocalDate nascimento;
 
-    @OneToMany
-    private Set<Carro> carros;
+    @ManyToOne
+    private Carro carro;
 
-    public Usuario(Set<Carro> carros) {
-        this.carros = carros;
+    public Usuario(Carro carro) {
+        this.carro = carro;
     }
 
     public String getCpf() {
@@ -72,12 +72,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public Set<Carro> getCarros() {
-        return carros;
+    public Carro getCarro() {
+        return carro;
     }
 
-    public void setCarros(Set<Carro> carros) {
-        this.carros = carros;
+    public void setCarro(Carro carros) {
+        this.carro = carros;
     }
 
     @Override
