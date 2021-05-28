@@ -2,7 +2,6 @@ package team.martin.controlador.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import team.martin.controlador.api.CarrosAPI;
 import team.martin.controlador.repository.CarrosRepository;
 import team.martin.controlador.repository.UserRepository;
