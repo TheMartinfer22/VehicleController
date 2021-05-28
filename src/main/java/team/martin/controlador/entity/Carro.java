@@ -1,8 +1,11 @@
 package team.martin.controlador.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import team.martin.controlador.entity.enums.DiaRodizio;
+import team.martin.controlador.utils.StringUtils;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -13,8 +16,6 @@ public class Carro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long carroID;
 
-    @JsonProperty(value = "Rodizio")
-    private boolean rodizio;
 
     @JsonProperty(value = "CodigoFipe")
     private String codigoFipe;
@@ -43,6 +44,12 @@ public class Carro {
     @ManyToOne
     @JoinColumn(name = "fk_usuario")
     private Usuario usuario;
+
+    @Transient
+    private boolean rodizio;
+
+    @Transient
+    private DiaRodizio diaRodizio;
 
     public Carro(Long carroID, String marca, String modelo, String valor) {
     }
@@ -122,6 +129,7 @@ public class Carro {
         this.usuario = usuario;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,11 +151,12 @@ public class Carro {
         this.carroID = id;
     }
 
-    public boolean isRodizio() {
-        return rodizio;
+    public DiaRodizio getDiaRodizio() {
+        return DiaRodizio.getFromRange(StringUtils.getLastStringFromValue(this.ano.toString()));
     }
 
-    public void setRodizio(boolean rodizio) {
-        rodizio = rodizio;
+    public boolean isRodizio() {
+        LocalDate today = LocalDate.now();
+        return DiaRodizio.getFromDayOfWeek(today.getDayOfWeek().getValue()) == this.getDiaRodizio();
     }
 }
