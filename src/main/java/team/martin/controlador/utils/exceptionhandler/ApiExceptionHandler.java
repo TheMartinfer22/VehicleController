@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import team.martin.controlador.utils.exceptions.DadosEmUso;
+import team.martin.controlador.utils.exceptions.DadosInvalidos;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -32,6 +33,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DadosEmUso.class)
     public ResponseEntity<Object> handleDadosEmUso(DadosEmUso ex, WebRequest request){
+        Resultado result = new Resultado();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        result.setStatus(status.value());
+        result.setMotivo(ex.getMessage());
+        result.setTime(LocalDateTime.now());
+
+        return handleExceptionInternal(ex, result, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(DadosInvalidos.class)
+    public ResponseEntity<Object> handleDadosInvalidos(DadosInvalidos ex, WebRequest request){
         Resultado result = new Resultado();
         HttpStatus status = HttpStatus.BAD_REQUEST;
         result.setStatus(status.value());
